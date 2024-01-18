@@ -15,6 +15,7 @@ import { routes } from './app.routes';
 import { AuthService } from './auth.service';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
 
 // Use the NgModule decorator to define the AppModule.
 @NgModule({
@@ -27,16 +28,15 @@ import { AppComponent } from './app.component';
     FormsModule,
     BrowserModule,
     // Add the AppRoutingModule to the imports array if you have set up routing.
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
   ],
   declarations: [
     // Declare components here.
-    LoginComponent,
   ],
   providers: [
     // Add services to the providers array if they should be globally available.
-    AuthService
+    AuthService,
+    HttpClientModule,
   ],
-  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

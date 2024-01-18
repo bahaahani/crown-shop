@@ -13,7 +13,7 @@ export class FooterComponent {
   logoUrl: string = 'assets/logo.png';
   contactDetails: { phone: string; email: string } = { phone: '123-456-7890', email: 'info@crown-clothing.com' };
   socialLinks: { name: string; url: string; icon: string }[] = [
-    { name: 'Facebook', url: 'https://facebook.com', icon: 'assets/icons/facebook.svg' },
+    { name: 'Facebook', url: 'https://facebook.com', icon: 'assets/logo.png' },
     // ... other social links
   ];
 }

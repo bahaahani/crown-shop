@@ -1,8 +1,10 @@
 <header class="header">
-    <img src="{{ logoUrl }}" alt="Logo">
+    <img src="{{ logoUrl }}" alt="Logo" class="header-logo">
     <nav>
         <ul>
-            <li *ngFor="let item of navItems">{{ item }}</li>
+            <li *ngFor="let item of navItems">
+                <a [routerLink]="['..'+'/' + item]" routerLinkActive="active">{{ item }}</a>
+            </li>
         </ul>
     </nav>
 </header>

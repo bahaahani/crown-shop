@@ -1,12 +1,16 @@
+<app-header></app-header>
 <div class="home">
     <h1>Featured Products</h1>
     <div class="products">
         <div *ngFor="let product of featuredProducts" class="product">
-            <img [src]="product.imageUrl" alt="{{ product.name }}">
+            <img [ngStyle]="{'height': '460px', 'width': '260px','object-fit:': 'fill'}" 
+             [src]="product.imageUrl" alt="{{ product.name }}">
             <h2>{{ product.name }}</h2>
             <p>{{ product.description }}</p>
             <span>${{ product.price }}</span>
         </div>
     </div>
 </div>
+<app-footer></app-footer>
+
 

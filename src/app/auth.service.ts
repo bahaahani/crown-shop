@@ -1,20 +1,32 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private loginUrl = 'http://localhost:3000/api/login'; // URL to your login API
-  private signupUrl = 'http://localhost:3000/api/signup'; // URL to your signup API
+  private baseUrl = 'http://localhost:3000/api';
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
-  loginUser(user: any) {
-    return this.http.post<any>(this.loginUrl, user);
+  async register(user: any) {
+    const response = await fetch(`${this.baseUrl}/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+    return await response.json();
   }
 
-  signupUser(user: any) {
-    return this.http.post<any>(this.signupUrl, user);
+  async loginUser(user: any) {
+    const response = await fetch(`${this.baseUrl}/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(user),
+    });
+    return await response.json();
   }
 }

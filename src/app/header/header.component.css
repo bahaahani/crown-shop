@@ -1,0 +1,28 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+}
+
+.header img {
+  max-height: 50px; /* Adjust size as necessary */
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+nav ul li {
+  padding: 0 1rem;
+}
+
+nav ul li:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

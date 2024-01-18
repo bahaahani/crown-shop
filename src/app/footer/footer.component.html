@@ -1,11 +1,20 @@
 <footer class="footer">
-    <div>
-        <p>Contact us at: {{ contactDetails.email }}</p>
-        <p>Phone: {{ contactDetails.phone }}</p>
-    </div>
-    <div class="social-links">
-        <a *ngFor="let link of socialLinks" [href]="link.url">
-            <img [src]="link.icon" alt="{{ link.name }}">
-        </a>
+    <div class="footer-content">
+        <img src="{{ logoUrl }}" alt="Logo" class="footer-logo">
+        <div class="contact-info">
+            <p><strong>Contact Us:</strong></p>
+            <p>Phone: {{ contactDetails.phone }}</p>
+            <p>Email: {{ contactDetails.email }}</p>
+        </div>
+        <div class="social-media">
+            <p><strong>Follow Us:</strong></p>
+            <ul>
+                <li *ngFor="let link of socialLinks">
+                    <a href="{{ link.url }}" target="_blank">
+                        <img src="{{ link.icon }}" alt="{{ link.name }}">
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </footer>

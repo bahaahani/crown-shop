@@ -1,19 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrls: ['./header.component.css'],
 })
-
 export class HeaderComponent {
   logoUrl: string = 'assets/logo.png';
-  navItems: string[] = ['Home', 'Shop', 'About Us', 'Contact'];
-  
+  navItems: string[] = ['home', 'about-us', 'login', 'signup'];
+
   // Other relevant header properties
 }
-
-
