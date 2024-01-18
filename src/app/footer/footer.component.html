@@ -1,1 +1,11 @@
-<p>footer works!</p>
+<footer class="footer">
+    <div>
+        <p>Contact us at: {{ contactDetails.email }}</p>
+        <p>Phone: {{ contactDetails.phone }}</p>
+    </div>
+    <div class="social-links">
+        <a *ngFor="let link of socialLinks" [href]="link.url">
+            <img [src]="link.icon" alt="{{ link.name }}">
+        </a>
+    </div>
+</footer>

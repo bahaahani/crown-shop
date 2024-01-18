@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-
+import { Component,OnInit } from '@angular/core';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
 })
-export class SignupComponent {
-
+export class SignupComponent implements OnInit {
+  ngOnInit(): void {
+  }
 }
+

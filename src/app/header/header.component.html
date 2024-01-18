@@ -1,1 +1,8 @@
-<p>header works!</p>
+<header class="header">
+    <img src="{{ logoUrl }}" alt="Logo">
+    <nav>
+        <ul>
+            <li *ngFor="let item of navItems">{{ item }}</li>
+        </ul>
+    </nav>
+</header>

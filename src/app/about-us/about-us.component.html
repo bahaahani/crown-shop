@@ -1,1 +1,20 @@
-<p>about-us works!</p>
+<div class="about-us">
+    <h1>About Us</h1>
+    <p>{{ companyInfo }}</p>
+    <section class="mission">
+        <h2>Our Mission</h2>
+        <p>{{ missionStatement }}</p>
+    </section>
+    <section class="values">
+        <h2>Our Values</h2>
+        <ul>
+            <li *ngFor="let value of values">{{ value }}</li>
+        </ul>
+    </section>
+    <section class="team">
+        <h2>Our Team</h2>
+        <ul>
+            <li *ngFor="let founder of founders">{{ founder }}</li>
+        </ul>
+    </section>
+</div>
