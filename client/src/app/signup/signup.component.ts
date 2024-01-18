@@ -1,13 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { CommonModule } from '@angular/common';
+import { HeaderComponent } from './../header/header.component';
+import { FooterComponent } from './../footer/footer.component';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
   templateUrl: './signup.component.html',
+  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
   styleUrls: ['./signup.component.css'],
-  imports: [FormsModule],
 })
 export class SignupComponent implements OnInit {
   user = {
