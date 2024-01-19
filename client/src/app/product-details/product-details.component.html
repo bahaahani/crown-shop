@@ -1,0 +1,10 @@
+<app-header></app-header>
+<div *ngIf="product" class="product-details">
+    <img [ngStyle]="{'height': '460px', 'width': '260px', 'object-fit': 'fill'}" [src]="product.imageUrl"
+        alt="{{ product.name }}">
+    <h2>{{ product.name }}</h2>
+    <p>{{ product.description }}</p>
+    <span>${{ product.price }}</span>
+    <!-- Add more product details as needed -->
+</div>
+<app-footer></app-footer>
