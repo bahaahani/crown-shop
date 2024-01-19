@@ -4,12 +4,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-details',
   standalone: true,
   templateUrl: './product-details.component.html',
-  imports: [CommonModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule],
   styleUrls: ['./product-details.component.css'],
 })
 export class ProductDetailsComponent implements OnInit {
@@ -17,7 +18,8 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService // Use the correct variable name for the injected service
+    private dataService: DataService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {

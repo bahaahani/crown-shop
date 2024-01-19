@@ -43,6 +43,18 @@ export class DataService {
     },
     // ... more products
   ];
+  private cartItems: any[] = [];
+  addToCart(product: any): void {
+    this.cartItems.push(product);
+  }
+
+  removeFromCart(productId: number): void {
+    this.cartItems = this.cartItems.filter((item) => item.id !== productId);
+  }
+
+  getCartItems(): any[] {
+    return this.cartItems;
+  }
   loadProducts() {
     return this.featuredProducts;
   }

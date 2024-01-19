@@ -1,0 +1,58 @@
+* Add this to ensure the body takes at least full viewport height */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Main content container */
+.content {
+  min-height: calc(100vh - 120px); /* Adjust 120px to the height of your footer */
+}
+
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky; /* Make footer stick to the bottom */
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-content {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  max-width: 1200px;
+  width: 100%;
+}
+/* CSS in styles.css or similar global stylesheet */
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.page-container {
+  min-height: 100vh; /* Full height */
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrap {
+  flex: 1; /* Ensures that this section takes up the available space */
+}
+
+/* Footer CSS */
+.footer {
+  background-color: #333;
+  color: #fff;
+  padding: 2rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ... rest of your footer CSS */

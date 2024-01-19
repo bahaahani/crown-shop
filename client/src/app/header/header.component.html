@@ -5,6 +5,8 @@
             <li *ngFor="let item of navItems">
                 <a [routerLink]="['..'+'/' + item]" routerLinkActive="active">{{ item }}</a>
             </li>
+                <button routerLink="/cart">Go to Cart</button>
+
         </ul>
     </nav>
 </header>

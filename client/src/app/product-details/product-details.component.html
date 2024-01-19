@@ -1,4 +1,3 @@
-<app-header></app-header>
 <div *ngIf="product" class="product-details">
     <img [ngStyle]="{'height': '460px', 'width': '260px', 'object-fit': 'fill'}" [src]="product.imageUrl"
         alt="{{ product.name }}">
@@ -7,4 +6,3 @@
     <span>${{ product.price }}</span>
     <!-- Add more product details as needed -->
 </div>
-<app-footer></app-footer>

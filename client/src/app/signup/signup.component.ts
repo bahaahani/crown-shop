@@ -9,7 +9,7 @@ import { FooterComponent } from './../footer/footer.component';
   selector: 'app-signup',
   standalone: true,
   templateUrl: './signup.component.html',
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule],
   styleUrls: ['./signup.component.css'],
 })
 export class SignupComponent implements OnInit {
