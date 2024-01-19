@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // Import the AppRoutingModule if you have set up routing.
 import { routes } from './app.routes';
@@ -15,7 +16,6 @@ import { routes } from './app.routes';
 import { AuthService } from './auth.service';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
 
 // Use the NgModule decorator to define the AppModule.
 @NgModule({
@@ -36,7 +36,6 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [
     // Add services to the providers array if they should be globally available.
     AuthService,
-    HttpClientModule,
   ],
 })
 export class AppModule {}

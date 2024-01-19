@@ -14,6 +14,7 @@ import { ProductsComponent } from '../products/products.component';
     HeaderComponent,
     FooterComponent,
     ProductsComponent,
+    
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',

@@ -27,6 +27,10 @@ export class ProductDetailsComponent implements OnInit {
     const productId = Number(this.route.snapshot.paramMap.get('id'));
     this.loadProductDetails(productId);
   }
+  addToCart(product: any): void {
+    this.dataService.addToCart(product);
+    this.router.navigate(['/cart']); // Navigate to the cart page
+  }
 
   loadProductDetails(productId: number) {
     // Using 'find' to get the single product

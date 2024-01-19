@@ -5,15 +5,20 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrl: './footer.component.css',
 })
-
-
 export class FooterComponent {
   logoUrl: string = 'assets/logo.png';
-  contactDetails: { phone: string; email: string } = { phone: '123-456-7890', email: 'info@crown-clothing.com' };
+  contactDetails: { phone: string; email: string } = {
+    phone: '123-456-7890',
+    email: 'info@crown-clothing.com',
+  };
   socialLinks: { name: string; url: string; icon: string }[] = [
-    { name: 'Facebook', url: 'https://facebook.com', icon: 'assets/logo.png' },
+    {
+      name: 'Facebook',
+      url: 'https://facebook.com',
+      icon: 'assets/facebook.png',
+    },
     // ... other social links
   ];
 }

@@ -1,13 +1,16 @@
 <!-- product.component.html -->
 <div class="products">
-    <div *ngFor="let product of featuredProducts" class="product">
-        <a [routerLink]="['/products', product.id]">
-            <img [ngStyle]="{'height': '460px', 'width': '260px', 'object-fit': 'contain'}" [src]="product.imageUrl"
-                alt="{{ product.name }}">
-            <h2>{{ product.name }}</h2>
-            <p>{{ product.description }}</p>
-            <span>${{ product.price }}</span>
-        </a>
-        <button (click)="addToCart(product)">Add to Cart</button>
-    </div>
+  <div *ngFor="let product of featuredProducts" class="product">
+    <a [routerLink]="['/products', product.id]">
+      <img
+        [ngStyle]="{ height: '460px', width: '260px', 'object-fit': 'contain' }"
+        [src]="product.imageUrl"
+        alt="{{ product.name }}"
+      />
+      <h2>{{ product.name }}</h2>
+      <p>{{ product.description }}</p>
+      <span>${{ product.price }}</span>
+    </a>
+    <button (click)="addToCart(product)">Add to Cart</button>
+  </div>
 </div>

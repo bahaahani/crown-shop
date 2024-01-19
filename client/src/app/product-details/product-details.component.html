@@ -1,8 +1,12 @@
 <div *ngIf="product" class="product-details">
-    <img [ngStyle]="{'height': '460px', 'width': '260px', 'object-fit': 'fill'}" [src]="product.imageUrl"
-        alt="{{ product.name }}">
-    <h2>{{ product.name }}</h2>
-    <p>{{ product.description }}</p>
-    <span>${{ product.price }}</span>
-    <!-- Add more product details as needed -->
+  <img
+    [ngStyle]="{ height: '460px', width: '260px', 'object-fit': 'fill' }"
+    [src]="product.imageUrl"
+    alt="{{ product.name }}"
+  />
+  <h2>{{ product.name }}</h2>
+  <p>{{ product.description }}</p>
+  <span>${{ product.price }}</span>
+  <!-- Add more product details as needed -->
+  <button (click)="addToCart(product)">Add to Cart</button>
 </div>

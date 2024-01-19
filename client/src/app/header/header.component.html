@@ -1,12 +1,13 @@
 <header class="header">
-    <img src="{{ logoUrl }}" alt="Logo" class="header-logo">
-    <nav>
-        <ul>
-            <li *ngFor="let item of navItems">
-                <a [routerLink]="['..'+'/' + item]" routerLinkActive="active">{{ item }}</a>
-            </li>
-                <button routerLink="/cart">Go to Cart</button>
-
-        </ul>
-    </nav>
+  <img src="{{ logoUrl }}" alt="Logo" class="header-logo" />
+  <nav>
+    <ul>
+      <li *ngFor="let item of navItems">
+        <a [routerLink]="['..' + '/' + item]" routerLinkActive="active">{{
+          item
+        }}</a>
+      </li>
+      <li routerLink="/cart">Go to Cart</li>
+    </ul>
+  </nav>
 </header>

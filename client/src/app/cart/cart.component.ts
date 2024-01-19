@@ -2,13 +2,11 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule],
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'], // Corrected property name
 })

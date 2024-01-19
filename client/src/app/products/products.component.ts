@@ -1,8 +1,13 @@
 import { DataService } from './../data.service';
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CartComponent } from '../cart/cart.component';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogModule,
+} from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 interface Product {
   id: number;
   name: string;
@@ -10,23 +15,29 @@ interface Product {
   price: number;
   imageUrl: string;
 }
+
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, RouterModule, CartComponent],
   templateUrl: './products.component.html',
-  styleUrl: './products.component.css',
+  styleUrls: ['./products.component.css'],
+  imports: [CommonModule, RouterModule],
 })
 export class ProductsComponent implements OnInit {
   featuredProducts: Product[] = [];
-  constructor(public data: DataService, private router: Router) {}
+
+  constructor(
+    public dataService: DataService,
+    private router: Router,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
-    this.featuredProducts = this.data.loadProducts();
+    this.featuredProducts = this.dataService.loadProducts();
   }
-  // Add this method in ProductComponent
-  addToCart(product: any): void {
-    this.data.addToCart(product);
-    this.router.navigate(['/cart']); // Navigate to the cart page
+
+  addToCart(product: Product): void {
+    this.dataService.addToCart(product);
+    alert('Your product has been added to the cart!');
   }
 }
