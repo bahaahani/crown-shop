@@ -1,4 +1,4 @@
-* Add this to ensure the body takes at least full viewport height */
+/*Add this to ensure the body takes at least full viewport height */
 html, body {
   height: 100%;
   margin: 0;
@@ -16,7 +16,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: sticky; /* Make footer stick to the bottom */
+  position: relative; /* Make footer stick to the bottom */
   bottom: 0;
   width: 100%;
 }

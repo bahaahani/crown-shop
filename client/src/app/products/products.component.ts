@@ -1,9 +1,8 @@
-import { CartService } from './../cart.service';
-import { DataService } from './../data.service';
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-
+import { DataService } from '../data.service';
 import { CommonModule } from '@angular/common';
+import { Router, RouterModule } from '@angular/router'; // Import Router
+
 interface Product {
   id: number;
   name: string;
@@ -21,31 +20,41 @@ interface Product {
 })
 export class ProductsComponent implements OnInit {
   featuredProducts: Product[] = [];
+  userId: number = 1; // Replace with the actual logic to obtain the user's ID
 
-  constructor(
-    public dataService: DataService,
-    private router: Router,
-    private cartService: CartService
-  ) {}
+  constructor(private dataService: DataService, private router: Router) {} // Inject Router
 
   ngOnInit(): void {
-    this.featuredProducts = this.dataService.loadProducts();
+    this.dataService
+      .loadProducts()
+      .then((products) => {
+        this.featuredProducts = products;
+      })
+      .catch((error) => {
+        console.error('Error loading products:', error);
+      });
   }
 
-  addToCart(product: Product): void {
-    this.dataService.addToCart(product);
-    alert('Your product has been added to the cart!');
-  }
-    async addProductToCart(product: Product) {
+  async loadProducts(): Promise<void> {
     try {
-      // Replace `userId` with the actual user ID obtained from authentication context or similar
-      const userId = 1; // This is just a placeholder
-      const response = await this.cartService.addToCart(userId, product.id);
-      // Show success message
-      console.log('Product added to cart', response);
-    } catch (error) {
-      // Handle errors here
-      console.error('Error adding product to cart:', error);
+      this.featuredProducts = await this.dataService.loadProducts();
+    } catch (error: any) {
+      // Type error
+      console.error('Error loading products:', error);
+    }
+  }
+
+  getCurrentUserId(): number {
+    // Implement getCurrentUserId
+    return this.userId;
+  }
+
+  async addToCart(product: Product): Promise<void> {
+    try {
+      await this.dataService.addToCart(1, product.id); // Pass product.id
+      this.router.navigate(['/cart']); // Navigate to the cart page
+    } catch (error: any) {
+      console.error('Error adding to cart:', error);
     }
   }
 }

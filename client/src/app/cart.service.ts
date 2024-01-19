@@ -4,8 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class CartService {
-  private apiUrl = 'http://localhost:3000/api'; // Adjust if your API is hosted elsewhere
-
+  private apiUrl = 'http://localhost:3000/api'; 
   async addToCart(userId: number, productId: number): Promise<Response> {
     const response = await fetch(`${this.apiUrl}/cart/add`, {
       method: 'POST',

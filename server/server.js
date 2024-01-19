@@ -12,9 +12,34 @@ app.use(bodyParser.json());
 // Mock database for example purposes
 const users = [];
 const products = [
-  { id: 1, name: "T-Shirt", price: 20.99, imageUrl: "link-to-image-1" },
-  { id: 2, name: "Jeans", price: 49.99, imageUrl: "link-to-image-2" },
-  // ... more products
+  {
+    id: 1,
+    name: "T-shirt",
+    description: "High-quality cotton t-shirt",
+    price: 20,
+    imageUrl: "assets/Tshirt.jpeg",
+  },
+  {
+    id: 2,
+    name: "Hoodie",
+    description: "High-quality cotton hoodie",
+    price: 32,
+    imageUrl: "assets/hoodie.jpeg",
+  },
+  {
+    id: 3,
+    name: "Jacket",
+    description: "High-quality cotton jacket",
+    price: 45,
+    imageUrl: "assets/jacket.jpg",
+  },
+  {
+    id: 4,
+    name: "Pants",
+    description: "High-quality cotton pants",
+    price: 25,
+    imageUrl: "assets/pants.jpeg",
+  },
 ];
 const carts = {};
 // Helper function to find user by email
@@ -60,10 +85,10 @@ app.get("/api/products", (req, res) => {
 app.post("/api/cart/add", (req, res) => {
   const { userId, productId } = req.body;
 
-  const user = findUserByEmail(userId);
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
+  // const user = findUserByEmail(userId);
+  // if (!user) {
+  //   return res.status(404).json({ message: "User not found" });
+  // }
 
   const product = products.find((product) => product.id === productId);
   if (!product) {
@@ -109,6 +134,16 @@ app.post("/api/cart/checkout", (req, res) => {
   carts[userId] = []; // Clear the cart after checkout
   res.json({ message: "Checkout successful" });
 });
+app.get("/api/products/:id", (req, res) => {
+  const productId = parseInt(req.params.id);
+  const product = products.find((p) => p.id === productId);
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404).send("Product not found");
+  }
+});
+
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -10,52 +10,40 @@ interface Product {
   providedIn: 'root',
 })
 export class DataService {
+  private apiUrl = 'http://localhost:3000/api'; // Adjust if your API is hosted elsewhere
+
+  async loadProducts(): Promise<Product[]> {
+    const response = await fetch(`${this.apiUrl}/products`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  }
   productId!: number;
   constructor() {}
-  featuredProducts: Product[] = [
-    {
-      id: 1,
-      name: 'T-shirt',
-      description: 'High-quality cotton t-shirt',
-      price: 20,
-      imageUrl: 'assets/Tshirt.jpeg',
-    },
-    {
-      id: 2,
-      name: 'Hoodie',
-      description: 'High-quality cotton hoodie',
-      price: 32,
-      imageUrl: 'assets/hoodie.jpeg',
-    },
-    {
-      id: 3,
-      name: 'Jacket',
-      description: 'High-quality cotton jacket',
-      price: 45,
-      imageUrl: 'assets/jacket.jpg',
-    },
-    {
-      id: 4,
-      name: 'Pants',
-      description: 'High-quality cotton pants',
-      price: 25,
-      imageUrl: 'assets/pants.jpeg',
-    },
-    // ... more products
-  ];
+  featuredProducts: Product[] = [];
   private cartItems: any[] = [];
-  addToCart(product: any): void {
-    this.cartItems.push(product);
+
+  async getProduct(productId: number): Promise<Product> {
+    const response = await fetch(`${this.apiUrl}/products/${productId}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
   }
 
+  async addToCart(userId: number, productId: number): Promise<void> {
+    await fetch(`${this.apiUrl}/cart/add`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, productId }),
+    });
+  }
   removeFromCart(productId: number): void {
     this.cartItems = this.cartItems.filter((item) => item.id !== productId);
   }
 
   getCartItems(): any[] {
     return this.cartItems;
-  }
-  loadProducts() {
-    return this.featuredProducts;
   }
 }

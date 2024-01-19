@@ -1,14 +1,17 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
+  standalone: true,
+  imports: [CommonModule],
 })
 export class CartComponent implements OnInit {
-  cartItems: any[] = []; // Adjust the type to match your product type
+  cartItems: any[] = [];
 
   constructor(private dataService: DataService, private router: Router) {}
 

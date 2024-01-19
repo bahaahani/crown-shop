@@ -8,7 +8,6 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { MatDialogModule } from '@angular/material/dialog';
 
 // Import the AppRoutingModule if you have set up routing.
 import { routes } from './app.routes';
@@ -16,6 +15,7 @@ import { routes } from './app.routes';
 import { AuthService } from './auth.service';
 import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { CartComponent } from './cart/cart.component';
 
 // Use the NgModule decorator to define the AppModule.
 @NgModule({
@@ -27,6 +27,7 @@ import { AppComponent } from './app.component';
     FooterComponent,
     FormsModule,
     BrowserModule,
+    CartComponent,
     // Add the AppRoutingModule to the imports array if you have set up routing.
     RouterModule.forRoot(routes),
   ],
