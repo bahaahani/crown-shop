@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FooterComponent } from '../footer/footer.component';
-import { HeaderComponent } from './../header/header.component';
 
 @Component({
   selector: 'app-about-us',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './about-us.component.html',
   styleUrl: './about-us.component.css',
 })

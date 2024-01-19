@@ -1,13 +1,9 @@
+import { CartService } from './../cart.service';
 import { DataService } from './../data.service';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogModule,
-} from '@angular/material/dialog';
+
 import { CommonModule } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
 interface Product {
   id: number;
   name: string;
@@ -29,7 +25,7 @@ export class ProductsComponent implements OnInit {
   constructor(
     public dataService: DataService,
     private router: Router,
-    public dialog: MatDialog
+    private cartService: CartService
   ) {}
 
   ngOnInit(): void {
@@ -39,5 +35,17 @@ export class ProductsComponent implements OnInit {
   addToCart(product: Product): void {
     this.dataService.addToCart(product);
     alert('Your product has been added to the cart!');
+  }
+    async addProductToCart(product: Product) {
+    try {
+      // Replace `userId` with the actual user ID obtained from authentication context or similar
+      const userId = 1; // This is just a placeholder
+      const response = await this.cartService.addToCart(userId, product.id);
+      // Show success message
+      console.log('Product added to cart', response);
+    } catch (error) {
+      // Handle errors here
+      console.error('Error adding product to cart:', error);
+    }
   }
 }
