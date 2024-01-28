@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './../header/header.component';
-import { FooterComponent } from './../footer/footer.component';
 
 @Component({
   selector: 'app-signup',
@@ -24,19 +22,29 @@ export class SignupComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {}
-
-  onSignup(form: NgForm) {
-    if (form.valid) {
-      this.authService
-        .register(this.user)
-        .then((response) => {
-          console.log('User registered successfully', response);
-          // Handle successful registration
-        })
-        .catch((error) => {
-          console.error('Registration failed', error);
-          // Handle registration errors
-        });
-    }
+  errorMessage = '';
+  onSignup(form: any) {
+    this.authService
+      .register(form.value)
+      .toPromise()
+      .then((response) => {
+        if (response.message) {
+          // Handle the response message
+          if (response.message === 'User already exists') {
+            this.errorMessage =
+              'This email is already registered. Try logging in.';
+          } else {
+            // Handle other messages or success
+            this.errorMessage = '';
+            alert('User registered successfully' + response);
+            // Redirect to login or other actions
+          }
+        }
+      })
+      .catch((error) => {
+        alert('Signup error:' + error);
+        this.errorMessage =
+          'An error occurred during signup. Please try again.';
+      });
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from './../data.service';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from '../auth.service';
 interface Product {
   id: number;
   name: string;
@@ -23,15 +23,23 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private dataService: DataService
+    private dataService: DataService,
+    private AuthService: AuthService
   ) {}
-
+  userId!: any; // Declare userId property
   ngOnInit(): void {
-    const productId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadProductDetails(productId);
+    const productId = this.route.snapshot.paramMap.get('id');
+    if (productId) {
+      this.loadProductDetails(productId);
+    } else {
+      console.error('Product ID is undefined');
+      // Handle the undefined ID, perhaps by redirecting back to a product list
+    }
+    console.log('Product details', productId);
+    this.userId = this.AuthService.getCurrentUserId();
   }
 
-  loadProductDetails(productId: number): void {
+  loadProductDetails(productId: string): void {
     // Fetch the product details from the DataService
     this.dataService
       .getProduct(productId)
@@ -45,9 +53,8 @@ export class ProductDetailsComponent implements OnInit {
 
   addToCart(): void {
     // Assuming you have a method to get the current user's ID
-    const userId = this.getCurrentUserId();
     this.dataService
-      .addToCart(userId, this.product.id)
+      .addToCart(this.userId, this.product.id)
       .then(() => {
         // Handle successful addition to cart
         console.log('Product added to cart');
@@ -56,10 +63,5 @@ export class ProductDetailsComponent implements OnInit {
         // Handle error
         console.error('Error adding to cart:', error);
       });
-  }
-
-  getCurrentUserId(): number {
-    // Implement this method based on your user authentication logic
-    return 1; // Example user ID
   }
 }

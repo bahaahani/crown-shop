@@ -10,10 +10,13 @@ const {
   where,
   getDocs,
   addDoc,
+  doc,
+  getDoc,
+  updateDoc,
 } = require("firebase/firestore");
-
+let carts = {};
 const saltRounds = 10;
-
+const jwt = require("jsonwebtoken");
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAfAXybvA6UudURsN05uUdKJODKJ-bmsEk",
@@ -33,7 +36,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // This needs to be above your route handlers
 
 // Signup Endpoint
 app.post("/api/signup", async (req, res) => {
@@ -65,8 +68,7 @@ app.post("/api/signup", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-// Login Endpoint
+secretKey = "secretKey";
 app.post("/api/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -87,23 +89,30 @@ app.post("/api/login", async (req, res) => {
     }
 
     // Assuming only one user with this email
-    const user = querySnapshot.docs[0].data();
+    const userDoc = querySnapshot.docs[0];
+    const user = userDoc.data();
 
     // Verify the password
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
+      // Sign the token with the user's Firestore document ID
+      const token = jwt.sign({ userId: userDoc.id }, secretKey, {
+        expiresIn: "1h",
+      });
+
       // Omit the password when sending the user data
       const { password, ...userWithoutPassword } = user;
-      res.json({
+      return res.json({
         message: "User logged in successfully",
         user: userWithoutPassword,
+        token: token,
       });
     } else {
-      res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -113,8 +122,11 @@ app.get("/api/products", async (req, res) => {
     const productsRef = collection(db, "products");
     const querySnapshot = await getDocs(productsRef);
 
-    // Convert Firestore documents to a list of products
-    const products = querySnapshot.docs.map((doc) => doc.data());
+    // Convert Firestore documents to a list of products including the document ID
+    const products = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
 
     res.json(products);
   } catch (error) {
@@ -123,35 +135,27 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// Add to Cart Endpoint
 app.post("/api/cart/add", async (req, res) => {
+  const { userId, productId } = req.body;
+  // ... existing validation code ...
+
   try {
-    const { userId, productId } = req.body;
-
-    // Validate request
-    if (!userId || !productId) {
-      return res.status(400).json({ message: "Missing userId or productId" });
-    }
-
-    // Fetch user from Firestore
     const userRef = doc(db, "users", userId);
-    const userSnapshot = await getDoc(userRef);
-
-    if (!userSnapshot.exists()) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Fetch product from Firestore
     const productRef = doc(db, "products", productId);
-    const productSnapshot = await getDoc(productRef);
 
+    // Fetch product from Firestore to get the latest data
+    const productSnapshot = await getDoc(productRef);
     if (!productSnapshot.exists()) {
       return res.status(404).json({ message: "Product not found" });
     }
+    const product = { id: productSnapshot.id, ...productSnapshot.data() };
 
-    // Add product to user's cart
+    // Fetch user's cart from Firestore
+    const userSnapshot = await getDoc(userRef);
+    if (!userSnapshot.exists()) {
+      return res.status(404).json({ message: "User not found" });
+    }
     const user = userSnapshot.data();
-    const product = productSnapshot.data();
     const cart = user.cart ? [...user.cart, product] : [product];
 
     // Update user's cart in Firestore
@@ -159,11 +163,9 @@ app.post("/api/cart/add", async (req, res) => {
 
     res.json({ message: "Product added to cart", cart });
   } catch (error) {
-    console.error("Error adding to cart:", error);
-    res.status(500).json({ message: "Internal server error" });
+    // ... error handling code ...
   }
 });
-
 // Get Cart Endpoint
 app.get("/api/cart/:userId", (req, res) => {
   const { userId } = req.params;
@@ -175,7 +177,7 @@ app.post("/api/cart/remove", async (req, res) => {
   try {
     const { userId, productId } = req.body;
 
-    // Fetch user from Firestore
+    // Fetch user's cart from Firestore
     const userRef = doc(db, "users", userId);
     const userSnapshot = await getDoc(userRef);
 
@@ -183,7 +185,7 @@ app.post("/api/cart/remove", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let user = userSnapshot.data();
+    const user = userSnapshot.data();
     let cart = user.cart || [];
 
     // Remove the product from the cart
@@ -198,20 +200,28 @@ app.post("/api/cart/remove", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 //checkout endpoint
 app.post("/api/cart/checkout", async (req, res) => {
   try {
     const { userId } = req.body;
 
-    // Fetch user from Firestore
-    const userRef = doc(db, "users", userId);
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Ensure userId is a string
+    const userIdStr = String(userId);
+
+    // Fetch user's cart from Firestore
+    const userRef = doc(db, "users", userIdStr);
     const userSnapshot = await getDoc(userRef);
 
     if (!userSnapshot.exists()) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let user = userSnapshot.data();
+    const user = userSnapshot.data();
 
     if (!user.cart || user.cart.length === 0) {
       return res.status(400).json({ message: "Cart is empty" });
@@ -228,27 +238,23 @@ app.post("/api/cart/checkout", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
 //get product by id
-app.get("/api/products/:id", async (req, res) => {
+app.get("/api/products/:productId", async (req, res) => {
+  const productId = req.params.productId;
+  const productRef = doc(db, "products", productId);
   try {
-    const productId = req.params.id;
-
-    // Fetch product from Firestore
-    const productRef = doc(db, "products", productId);
     const productSnapshot = await getDoc(productRef);
-
     if (!productSnapshot.exists()) {
-      return res.status(404).send("Product not found");
+      return res.status(404).json({ message: "Product not found" });
     }
-
     const product = productSnapshot.data();
     res.json(product);
   } catch (error) {
-    console.error("Error fetching product:", error);
-    res.status(500).send("Internal server error");
+    console.error("Error fetching product from Firestore:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
-
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

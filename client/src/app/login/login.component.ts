@@ -4,6 +4,7 @@ import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './../header/header.component';
 import { FooterComponent } from './../footer/footer.component';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -23,13 +24,18 @@ export class LoginComponent implements OnInit {
     if (form.valid) {
       this.authService
         .loginUser(this.user)
-        .then((response) => {
-          console.log('Login successful', response);
-          // Handle successful login
-        })
-        .catch((error) => {
-          console.error('Login failed', error);
-          // Handle login errors
+        .pipe(
+          catchError((error) => {
+            console.error('Login failed', error);
+            // Handle login errors
+            return of(null); // Return a valid result to continue the Observable chain
+          })
+        )
+        .subscribe((response) => {
+          if (response) {
+            console.log('Login successful', response);
+            // Handle successful login
+          }
         });
     }
   }

@@ -4,19 +4,27 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class CartService {
-  private apiUrl = 'http://localhost:3000/api'; 
-  async addToCart(userId: number, productId: number): Promise<Response> {
-    const response = await fetch(`${this.apiUrl}/cart/add`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId, productId }),
-    });
-    return response.json();
+  private apiUrl = 'http://localhost:3000/api';
+  async addToCart(userId: string, productId: string): Promise<any> {
+    try {
+      const response = await fetch(`${this.apiUrl}/cart/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, productId }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      throw error; // Rethrow the error or handle it as needed
+    }
   }
 
-  async removeFromCart(userId: number, productId: number): Promise<Response> {
+  async removeFromCart(userId: string, productId: string): Promise<any> {
     const response = await fetch(`${this.apiUrl}/cart/remove`, {
       method: 'POST',
       headers: {
@@ -27,7 +35,7 @@ export class CartService {
     return response.json();
   }
 
-  async getCartItems(userId: number): Promise<Response> {
+  async getCartItems(userId: string): Promise<any> {
     const response = await fetch(`${this.apiUrl}/cart/${userId}`, {
       method: 'GET',
       headers: {
@@ -37,7 +45,7 @@ export class CartService {
     return response.json();
   }
 
-  async checkoutCart(userId: number): Promise<Response> {
+  async checkoutCart(userId: string): Promise<any> {
     const response = await fetch(`${this.apiUrl}/cart/checkout`, {
       method: 'POST',
       headers: {
