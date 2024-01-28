@@ -2,7 +2,7 @@ import { AuthService } from './../auth.service';
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router'; // Import Router
+import { Router, RouterModule, ActivatedRoute } from '@angular/router'; // Import Router
 
 interface Product {
   id: number;
@@ -25,7 +25,7 @@ export class ProductsComponent implements OnInit {
   constructor(
     private dataService: DataService,
     private router: Router,
-    private AuthService: AuthService
+    private AuthService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -47,9 +47,11 @@ export class ProductsComponent implements OnInit {
     } else {
       // No user in local storage, proceed with login
     }
-    this.AuthService.loginUser(currentUser).toPromise().then((userData) => {
-      this.userId = userData.id;
-    });
+    this.AuthService.loginUser(currentUser)
+      .toPromise()
+      .then((userData) => {
+        this.userId = userData.id;
+      });
   }
 
   async loadProducts(): Promise<void> {

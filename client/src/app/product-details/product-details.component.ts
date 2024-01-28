@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DataService } from './../data.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
@@ -16,7 +16,7 @@ interface Product {
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.css'],
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
 })
 export class ProductDetailsComponent implements OnInit {
   product!: Product;
