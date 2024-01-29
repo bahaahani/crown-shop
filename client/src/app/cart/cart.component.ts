@@ -2,7 +2,6 @@ import { CartService } from './../cart.service';
 import { AuthService } from './../auth.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -24,41 +23,47 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.userId = this.AuthService.getCurrentUserId()!;
     if (!this.userId) {
-      // Redirect to login or show an error message
       this.router.navigate(['/login']);
       return;
     }
     this.fetchCartItems();
   }
 
-  async fetchCartItems(): Promise<void> {
-    try {
-      this.cartItems = await this.CartService.getCartItems(this.userId);
-    } catch (error) {
-      console.error('Error fetching cart items:', error);
-    }
+  fetchCartItems(): void {
+    this.CartService.getCartItems(this.userId).subscribe(
+      (items) => {
+        this.cartItems = items;
+      },
+      (error) => {
+        console.error('Error fetching cart items:', error);
+      }
+    );
   }
 
-  async removeFromCart(productId: string): Promise<void> {
-    try {
-      await this.CartService.removeFromCart(this.userId, productId);
-      await this.fetchCartItems(); // Refresh cart items
-    } catch (error) {
-      console.error('Error removing item from cart:', error);
-    }
+  removeFromCart(productId: string): void {
+    this.CartService.removeFromCart(this.userId, productId).subscribe(
+      () => {
+        this.fetchCartItems(); // Refresh cart items
+      },
+      (error) => {
+        console.error('Error removing item from cart:', error);
+      }
+    );
   }
 
   calculateTotal(): number {
     return this.cartItems.reduce((sum, item) => sum + item.price, 0);
   }
 
-  async checkout(): Promise<void> {
-    try {
-      await this.CartService.checkoutCart(this.userId);
-      this.cartItems = []; // Clear the cart on the frontend
-      alert('Your order has been placed!');
-    } catch (error) {
-      console.error('Error during checkout:', error);
-    }
+  checkout(): void {
+    this.CartService.checkoutCart(this.userId).subscribe(
+      () => {
+        this.cartItems = []; // Clear the cart on successful checkout
+        alert('Your order has been placed!');
+      },
+      (error) => {
+        console.error('Error during checkout:', error);
+      }
+    );
   }
 }

@@ -12,7 +12,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser = this.currentUserSubject.asObservable();
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router, private http: HttpClient) {} // Updated constructor
 
   getCurrentUserId(): string | null {
     const currentUser = localStorage.getItem('currentUser');

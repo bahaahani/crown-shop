@@ -1,58 +1,36 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   private apiUrl = 'http://localhost:3000/api';
-  async addToCart(userId: string, productId: string): Promise<any> {
-    try {
-      const response = await fetch(`${this.apiUrl}/cart/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId, productId }),
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      throw error; // Rethrow the error or handle it as needed
-    }
+
+  constructor(private http: HttpClient) {}
+
+  addToCart(userId: string, productId: string): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/cart/add`, { userId, productId })
+      .pipe(
+        catchError((error) => {
+          console.error('Error adding to cart:', error);
+          return throwError(error);
+        })
+      );
+  }
+  removeFromCart(userId: string, productId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cart/remove`, { userId, productId });
   }
 
-  async removeFromCart(userId: string, productId: string): Promise<any> {
-    const response = await fetch(`${this.apiUrl}/cart/remove`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId, productId }),
-    });
-    return response.json();
+  getCartItems(userId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/cart/${userId}`);
   }
 
-  async getCartItems(userId: string): Promise<any> {
-    const response = await fetch(`${this.apiUrl}/cart/${userId}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return response.json();
-  }
-
-  async checkoutCart(userId: string): Promise<any> {
-    const response = await fetch(`${this.apiUrl}/cart/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ userId }),
-    });
-    return response.json();
+  checkoutCart(userId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cart/checkout`, { userId });
   }
 }
