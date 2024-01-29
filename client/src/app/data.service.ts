@@ -1,4 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 interface Product {
   id: number;
   name: string;
@@ -12,49 +14,26 @@ interface Product {
 export class DataService {
   private apiUrl = 'http://localhost:3000/api'; // Adjust if your API is hosted elsewhere
 
-  async loadProducts(): Promise<Product[]> {
-    const response = await fetch(`${this.apiUrl}/products`);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
+  loadProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.apiUrl}/products`);
   }
   productId!: string;
-  constructor() {}
+  constructor(private http: HttpClient) {}
   featuredProducts: Product[] = [];
   private cartItems: any[] = [];
 
-  async getProduct(productId: string): Promise<Product> {
-    const response = await fetch(`${this.apiUrl}/products/${productId}`);
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
+  getProduct(productId: string): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/products/${productId}`);
   }
 
-  async addToCart(userId: number, productId: number): Promise<void> {
-    try {
-      const response = await fetch(`${this.apiUrl}/cart/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, productId }),
-      });
-      if (!response.ok) {
-        // If the response is not OK, throw an error with the response status
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      // You may want to return something here or handle the response
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      // Handle the error, maybe update the UI to inform the user
-    }
+  addToCart(userId: number, productId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cart/add`, { userId, productId });
+  }
+  removeFromCart(userId: number, productId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cart/remove`, { userId, productId });
   }
 
-  removeFromCart(productId: number): void {
-    this.cartItems = this.cartItems.filter((item) => item.id !== productId);
-  }
-
-  getCartItems(): any[] {
-    return this.cartItems;
+  getCartItems(userId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/cart/${userId}`);
   }
 }

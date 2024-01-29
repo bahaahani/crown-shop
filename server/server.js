@@ -41,9 +41,9 @@ app.use(express.json()); // This needs to be above your route handlers
 // Signup Endpoint
 app.post("/api/signup", async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, id } = req.body;
 
-    if (!email || !password || !firstName || !lastName) {
+    if (!email || !password || !firstName || !lastName || !id) {
       return res.status(400).json({ message: "Missing fields" });
     }
 
@@ -56,12 +56,18 @@ app.post("/api/signup", async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const newUser = { firstName, lastName, email, password: hashedPassword };
+    const newUser = {
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      id,
+    };
     await addDoc(usersRef, newUser);
 
     res.status(201).json({
       message: "User created successfully",
-      user: { firstName, lastName, email },
+      user: { firstName, lastName, email, id },
     });
   } catch (error) {
     console.error("Signup error:", error);

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -12,15 +13,13 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser = this.currentUserSubject.asObservable();
 
-  constructor(private router: Router, private http: HttpClient) {} // Updated constructor
-
-  getCurrentUserId(): string | null {
+  constructor(private router: Router, private http: HttpClient) {}
+  getCurrentUserId() {
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
       const userData = JSON.parse(currentUser);
       return userData.id;
     }
-    return null;
   }
 
   get currentUserValue(): any {
@@ -29,7 +28,11 @@ export class AuthService {
 
   register(user: any): Observable<any> {
     const url = `${this.baseUrl}/signup`;
-    return this.http.post(url, user).pipe(
+    const userId = uuidv4(); // Generate a random ID using the uuid library
+    user.id = userId; // Add the generated ID to the user object
+    const payload = { ...user, uuid: userId };
+    console.log(payload); // Include the id in the payload
+    return this.http.post(url, payload).pipe(
       tap((response) => {
         console.log('Register successful', response);
         // Handle successful registration
@@ -47,7 +50,7 @@ export class AuthService {
           this.currentUserSubject.next(userData.user);
           this.router.navigate(['/']);
         } else {
-          throw new Error('Login failed, token is missing');
+          throw new Error('Login failed, token or user data is missing');
         }
       }),
       catchError(this.handleError)

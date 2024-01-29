@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CartComponent implements OnInit {
   cartItems: any[] = [];
-  userId!: string;
+  userId: any;
   constructor(
     private CartService: CartService,
     private router: Router,
@@ -21,12 +21,28 @@ export class CartComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.userId = this.AuthService.getCurrentUserId()!;
+    this.userId = this.AuthService.getCurrentUserId();
+    console.log('User ID:', this.userId);
     if (!this.userId) {
       this.router.navigate(['/login']);
       return;
     }
     this.fetchCartItems();
+  }
+  saveChanges(): void {
+    this.cartItems.forEach((item) => {
+      if (item.removed) {
+        // Assuming you track locally if an item is removed
+        this.CartService.removeFromCart(this.userId, item.id).subscribe(
+          (response) => {
+            // Handle response
+          },
+          (error) => {
+            // Handle error
+          }
+        );
+      }
+    });
   }
 
   fetchCartItems(): void {

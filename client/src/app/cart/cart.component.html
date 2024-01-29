@@ -15,6 +15,7 @@
   </div>
   <div class="cart-total">
     <h3>Total: ${{ calculateTotal() }}</h3>
+    <button (click)="saveChanges()">Save Changes</button>
     <button (click)="checkout()" class="checkout-button">Checkout</button>
   </div>
 </div>
