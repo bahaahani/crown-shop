@@ -14,7 +14,20 @@
   align-items: center;
   justify-content: space-between;
 }
-
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.btn-primary {
+  background-color: #007bff;
+}
 .cart-item:last-child {
   border-bottom: none;
 }

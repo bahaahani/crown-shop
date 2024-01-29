@@ -1,6 +1,6 @@
 import { AuthService } from './../auth.service';
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../data.service';
+import { DataService } from '../product.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router'; // Import Router
 import { HttpClient } from '@angular/common/http';
@@ -31,8 +31,7 @@ export class ProductsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.AuthService.currentUserValue.id;
-
+    this.userId = JSON.parse(localStorage.getItem('currentUser') || '{}').id;
     this.dataService.loadProducts().subscribe(
       (loadedProducts) => {
         this.featuredProducts = loadedProducts;
@@ -43,9 +42,6 @@ export class ProductsComponent implements OnInit {
     );
 
     const currentUser = this.AuthService.currentUserValue;
-    if (!currentUser || !currentUser.id) {
-      // Redirect to login or handle the absence of a logged-in user
-    }
   }
 
   loadProducts() {
@@ -55,17 +51,6 @@ export class ProductsComponent implements OnInit {
       },
       (error) => {
         console.error('Error loading products:', error);
-      }
-    );
-  }
-
-  addToCart(product: Product): void {
-    this.dataService.addToCart(1, product.id).subscribe(
-      () => {
-        this.router.navigate(['/cart']);
-      },
-      (error) => {
-        console.error('Error adding to cart:', error);
       }
     );
   }

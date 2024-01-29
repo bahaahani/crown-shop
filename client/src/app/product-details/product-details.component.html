@@ -4,8 +4,16 @@
     [src]="product.imageUrl"
     alt="{{ product.name }}"
   />
+  <div *ngIf="showSuccessMessage" class="success-message">
+    {{ successMessage }}
+  </div>
+  <div *ngIf="showFailureMessage" class="error-message">
+    {{ failureMessage }}
+  </div>
   <h2>{{ product.name }}</h2>
   <p>{{ product.description }}</p>
   <span>${{ product.price }}</span>
-  <button (click)="addToCart()">Add to Cart</button>
+  <button class="btn btn-primary" (click)="addToCart()">
+    Add to Cart
+  </button>
 </div>

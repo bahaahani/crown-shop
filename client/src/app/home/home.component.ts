@@ -1,3 +1,5 @@
+import { AuthService } from './../auth.service';
+import { DataService } from '../product.service';
 import { HeaderComponent } from './../header/header.component';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
@@ -14,9 +16,15 @@ import { ProductsComponent } from '../products/products.component';
     HeaderComponent,
     FooterComponent,
     ProductsComponent,
-    
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent {}
+export class HomeComponent {
+  constructor(private AuthService: AuthService) {
+    this.userId = this.AuthService.getCurrentUserId();
+    console.log('User ID', this.userId);
+  }
+
+  userId: any;
+}

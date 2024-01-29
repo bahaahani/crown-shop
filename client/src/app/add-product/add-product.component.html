@@ -1,0 +1,86 @@
+<form
+  [formGroup]="productForm"
+  (ngSubmit)="onSubmit()"
+  class="max-w-lg mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg"
+>
+  <div class="mb-4">
+    <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
+      >Name:</label
+    >
+    <input formControlName="name" id="name" type="text" class="form-input" />
+    <div
+      *ngIf="
+        productForm.get('name').touched && productForm.get('name')?.invalid
+      "
+      class="text-red-500 text-xs mt-1"
+    >
+      Name is required.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label for="description" class="block text-gray-700 text-sm font-bold mb-2"
+      >Description:</label
+    >
+    <input
+      formControlName="description"
+      id="description"
+      type="text"
+      class="form-input"
+    />
+    <div
+      *ngIf="
+        productForm.get('description').touched &&
+        productForm.get('description').invalid
+      "
+      class="text-red-500 text-xs mt-1"
+    >
+      Description is required.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label for="price" class="block text-gray-700 text-sm font-bold mb-2"
+      >Price:</label
+    >
+    <input
+      formControlName="price"
+      id="price"
+      type="number"
+      class="form-input"
+    />
+    <div
+      *ngIf="
+        productForm.get('price').touched && productForm.get('price')?.invalid
+      "
+      class="text-red-500 text-xs mt-1"
+    >
+      A valid price is required.
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label for="imageUrl" class="block text-gray-700 text-sm font-bold mb-2"
+      >Image URL:</label
+    >
+    <input
+      formControlName="imageUrl"
+      id="imageUrl"
+      type="text"
+      class="form-input"
+    />
+    <div
+      *ngIf="
+        productForm.get('imageUrl').touched &&
+        productForm.get('imageUrl')?.invalid
+      "
+      class="text-red-500 text-xs mt-1"
+    >
+      Image URL is required.
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="!productForm.valid" class="submit-button">
+    Add Product
+  </button>
+</form>

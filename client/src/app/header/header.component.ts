@@ -11,7 +11,7 @@ import { RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
   logoUrl: string = 'assets/logo.png';
-  navItems: string[] = ['home', 'about-us', 'login', 'signup'];
+  navItems: string[] = ['home', 'about-us', 'login', 'signup', 'add-product'];
 
   // Other relevant header properties
 }

@@ -1,72 +1,67 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap, catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { BehaviorSubject, throwError } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
+
+interface User {
+  id: string;
+  // Other user properties
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3000/api';
-  private currentUserSubject = new BehaviorSubject<any>(null);
-  public currentUser = this.currentUserSubject.asObservable();
+  private baseUrl = 'http://localhost:3000';
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
 
-  constructor(private router: Router, private http: HttpClient) {}
-  getCurrentUserId() {
+  constructor(private http: HttpClient, private router: Router) {}
+
+  getCurrentUserId(): string | null {
     const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-      const userData = JSON.parse(currentUser);
-      return userData.id;
-    }
+    return currentUser ? JSON.parse(currentUser).id : null;
   }
 
-  get currentUserValue(): any {
+  get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
 
   register(user: any): Observable<any> {
     const url = `${this.baseUrl}/signup`;
-    const userId = uuidv4(); // Generate a random ID using the uuid library
-    user.id = userId; // Add the generated ID to the user object
-    const payload = { ...user, uuid: userId };
-    console.log(payload); // Include the id in the payload
-    return this.http.post(url, payload).pipe(
-      tap((response) => {
-        console.log('Register successful', response);
-        // Handle successful registration
-      }),
-      catchError(this.handleError)
-    );
-  }
-  loginUser(user: any): Observable<any> {
-    const url = `${this.baseUrl}/login`;
-    return this.http.post(url, user).pipe(
-      tap((userData: any) => {
-        if (userData && userData.token) {
-          localStorage.setItem('currentUser', JSON.stringify(userData.user));
-          localStorage.setItem('token', userData.token);
-          this.currentUserSubject.next(userData.user);
-          this.router.navigate(['/']);
-        } else {
-          throw new Error('Login failed, token or user data is missing');
-        }
+    user.id = uuidv4(); // Assign a unique ID to the user
+    return this.http.post<User>(url, user).pipe(
+      tap((userData) => {
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        this.currentUserSubject.next(userData);
+        this.router.navigate(['/']);
       }),
       catchError(this.handleError)
     );
   }
 
-  logout() {
+  loginUser(user: any): Observable<any> {
+    const url = `${this.baseUrl}/login`;
+    return this.http.post<User>(url, user).pipe(
+      tap((userData) => {
+        localStorage.setItem('currentUser', JSON.stringify(userData));
+        this.currentUserSubject.next(userData);
+        this.router.navigate(['/']);
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  logout(): void {
     localStorage.removeItem('currentUser');
-    localStorage.removeItem('token');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
-  private handleError(error: any) {
+  private handleError(error: any): Observable<never> {
     console.error('API Error:', error);
-    const errorMessage = 'An error occurred while making the API request.';
-    return throwError(errorMessage);
+    return throwError('An error occurred while making the API request.');
   }
 }

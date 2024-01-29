@@ -17,6 +17,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { CartComponent } from './cart/cart.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AddProductComponent } from './add-product/add-product.component';
 
 // Use the NgModule decorator to define the AppModule.
 @NgModule({
@@ -31,6 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     BrowserModule,
     CartComponent,
+    LoginComponent,
+    AddProductComponent,
     RouterModule.forRoot(routes),
   ],
   declarations: [

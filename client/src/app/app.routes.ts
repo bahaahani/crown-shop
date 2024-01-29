@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { CartComponent } from './cart/cart.component';
 import { NgModule } from '@angular/core';
+import { AddProductComponent } from './add-product/add-product.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'products/:id', component: ProductDetailsComponent },
   { path: 'cart', component: CartComponent },
+  { path: 'add-product', component: AddProductComponent },
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

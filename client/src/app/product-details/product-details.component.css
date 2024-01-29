@@ -15,6 +15,35 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.success-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: #d4edda;
+  color: #155724;
+}
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.btn-primary {
+  background-color: #007bff;
+}
+.error-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
 .product-details h2 {
   color: #333;
   font-size: 2rem;
